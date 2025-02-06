@@ -8,6 +8,8 @@ import cass.proposalapp.repository.ProposalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProposalService {
@@ -19,5 +21,12 @@ public class ProposalService {
         proposalRepository.save(proposal);
 
         return ProposalMapper.INSTANCE.convertEntityToDto(proposal);
+    }
+
+    public List<ProposalResponseDTO> getAllProposals() {
+
+        Iterable<Proposal> proposals = proposalRepository.findAll();
+
+        return ProposalMapper.INSTANCE.convertEntityListToDtoList(proposals);
     }
 }
