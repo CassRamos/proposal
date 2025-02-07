@@ -13,5 +13,18 @@ services:
       - "5434:5432"
     restart: unless-stopped
 
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq-proposal
+    environment:
+      - RABBITMQ_DEFAULT_USER=cass
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+networks:
+  default:
+    driver: bridge
 volumes:
   postgres:
