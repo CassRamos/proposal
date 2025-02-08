@@ -5,12 +5,16 @@ spring:
     password: password
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
   rabbitmq:
     host: localhost
     port: 5672
     username: cass
     password: password
+
+rabbitmq:
+  pending-proposal:
+    exchange: pending-proposal.exchange
 
 # Hibernate automatically detects the SQL dialect for PostgreSQL
 #    properties:

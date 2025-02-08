@@ -21,7 +21,7 @@ public interface ProposalMapper {
     @Mapping(target = "user.income", source = "income")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approved", ignore = true)
-    @Mapping(target = "integrated", ignore = true)
+    @Mapping(target = "integrated", constant = "true")
     @Mapping(target = "note", ignore = true)
     Proposal convertDtoToEntity(ProposalRequestDTO proposalRequestDTO);
 
