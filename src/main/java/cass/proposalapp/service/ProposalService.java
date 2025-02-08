@@ -15,10 +15,14 @@ import java.util.List;
 public class ProposalService {
 
     private final ProposalRepository proposalRepository;
+    private final NotificationService notificationService;
 
     public ProposalResponseDTO createProposal(ProposalRequestDTO request) {
         Proposal proposal = ProposalMapper.INSTANCE.convertDtoToEntity(request);
         proposalRepository.save(proposal);
+
+        ProposalResponseDTO response = ProposalMapper.INSTANCE.convertEntityToDto(proposal);
+        notificationService.sendNotification(response, "pending-proposal.exchange");
 
         return ProposalMapper.INSTANCE.convertEntityToDto(proposal);
     }
