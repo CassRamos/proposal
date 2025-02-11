@@ -16,7 +16,11 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfiguration {
 
     @Value("${rabbitmq.pending-proposal.exchange}")
-    private String exchangeName;
+    private String pendingProposalExchange;
+
+    @Value("${rabbitmq.completed-proposal.exchange}")
+    private String completedProposalExchange;
+
     private ConnectionFactory connectionFactory;
 
     public RabbitMQConfiguration(ConnectionFactory connectionFactory) {
@@ -54,22 +58,41 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public FanoutExchange createFanoutExchange() {
-        return new FanoutExchange("pending-proposal.exchange");
+    public FanoutExchange createFanoutPendingExchange() {
+        return ExchangeBuilder.fanoutExchange(pendingProposalExchange).build();
+    }
+
+    @Bean
+    public FanoutExchange createFanoutCompletedExchange() {
+        return ExchangeBuilder.fanoutExchange(completedProposalExchange).build();
     }
 
     @Bean
     public Binding createPendingCreditAnalysisBinding() {
         return BindingBuilder
                 .bind(createQueuePendingCreditAnalysisProposal())
-                .to(createFanoutExchange());
+                .to(createFanoutPendingExchange());
     }
 
     @Bean
     public Binding createPendingProposalNotificationBinding() {
         return BindingBuilder
                 .bind(createQueuePendingProposalNotification())
-                .to(createFanoutExchange());
+                .to(createFanoutPendingExchange());
+    }
+
+    @Bean
+    public Binding createCompletedProposalBinding() {
+        return BindingBuilder
+                .bind(createQueueCompletedProposal())
+                .to(createFanoutCompletedExchange());
+    }
+
+    @Bean
+    public Binding createCompletedProposalNotificationBinding() {
+        return BindingBuilder
+                .bind(createQueueCompletedProposalNotification())
+                .to(createFanoutCompletedExchange());
     }
 
     @Bean
