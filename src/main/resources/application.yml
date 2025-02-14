@@ -17,6 +17,8 @@ rabbitmq:
     exchange: pending-proposal.exchange
   completed-proposal:
     exchange: completed-proposal.exchange
+  queue:
+    entity-proposal: completed-proposal.finished-analysis
 
 # Hibernate automatically detects the SQL dialect for PostgreSQL
 #    properties:

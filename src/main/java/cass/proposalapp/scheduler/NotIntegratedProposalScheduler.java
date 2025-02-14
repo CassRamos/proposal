@@ -1,4 +1,4 @@
-package cass.proposalapp.Scheduler;
+package cass.proposalapp.scheduler;
 
 import cass.proposalapp.entity.Proposal;
 import cass.proposalapp.repository.ProposalRepository;

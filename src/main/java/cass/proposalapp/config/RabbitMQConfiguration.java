@@ -38,8 +38,8 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Queue createQueueCompletedProposal() {
-        return QueueBuilder.durable("completed-proposal.proposal").build();
+    public Queue createQueueCompletedProposalAnalysis() {
+        return QueueBuilder.durable("completed-proposal.finished-analysis").build();
     }
 
     @Bean
@@ -82,9 +82,9 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Binding createCompletedProposalBinding() {
+    public Binding createCompletedProposalAnalysisBinding() {
         return BindingBuilder
-                .bind(createQueueCompletedProposal())
+                .bind(createQueueCompletedProposalAnalysis())
                 .to(createFanoutCompletedExchange());
     }
 
