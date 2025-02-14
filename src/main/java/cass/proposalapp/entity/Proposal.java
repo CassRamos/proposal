@@ -16,7 +16,7 @@ public class Proposal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private Double requestedAmount;
     private int paymentDeadline;
     private Boolean approved;
@@ -25,7 +25,6 @@ public class Proposal {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
-    @JsonManagedReference
     private User user;
 
 }

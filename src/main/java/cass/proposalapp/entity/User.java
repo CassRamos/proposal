@@ -24,7 +24,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String name;
     private String lastName;
     private String cpf;
@@ -32,6 +32,5 @@ public class User {
     private Double income;
 
     @OneToMany(mappedBy = "user")
-    @JsonBackReference
     private List<Proposal> proposalList;
 }
