@@ -16,12 +16,40 @@ services:
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq-proposal
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      timeout: 5s
+      interval: 5s
+      retries: 3
     environment:
       - RABBITMQ_DEFAULT_USER=cass
       - RABBITMQ_DEFAULT_PASS=password
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  proposal-app:
+    image: proposal-app
+    container_name: proposal-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: cass
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: cass
+      SPRING_RABBITMQ_PASSWORD: password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   default:
