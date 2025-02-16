@@ -11,6 +11,11 @@ spring:
     port: 5672
     username: cass
     password: password
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
 
 rabbitmq:
   pending-proposal:

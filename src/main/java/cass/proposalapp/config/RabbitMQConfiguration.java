@@ -29,7 +29,13 @@ public class RabbitMQConfiguration {
 
     @Bean
     public Queue createQueuePendingCreditAnalysisProposal() {
-        return QueueBuilder.durable("pending-proposal.credit-analysis").build();
+        return QueueBuilder.durable("pending-proposal.credit-analysis")
+                .deadLetterExchange("pending-proposal.dlx")
+                .build();
+    }
+
+    @Bean Queue createDeadLetterQueuePendingProposal() {
+        return QueueBuilder.durable("pending-proposal.dlq").build();
     }
 
     @Bean
@@ -60,6 +66,10 @@ public class RabbitMQConfiguration {
     @Bean
     public FanoutExchange createFanoutPendingExchange() {
         return ExchangeBuilder.fanoutExchange(pendingProposalExchange).build();
+    }
+
+    @Bean FanoutExchange createFanoutPendingDeadLetterExchange() {
+        return ExchangeBuilder.fanoutExchange("pending-proposal.dlx").build();
     }
 
     @Bean
@@ -93,6 +103,13 @@ public class RabbitMQConfiguration {
         return BindingBuilder
                 .bind(createQueueCompletedProposalNotification())
                 .to(createFanoutCompletedExchange());
+    }
+
+    @Bean
+    public Binding pendingProposalDeadLetterQueueBinding() {
+        return BindingBuilder
+                .bind(createDeadLetterQueuePendingProposal())
+                .to(createFanoutPendingDeadLetterExchange());
     }
 
     @Bean
